@@ -142,7 +142,5 @@ class ChatBot {
 
 // Initialize Bot when DOM loads
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("Chatbot initializing...");
   new ChatBot();
-  console.log("Chatbot initialized.");
 });
