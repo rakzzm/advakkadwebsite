@@ -87,7 +87,7 @@ const products = [
     category: "women",
     subcategory: "women",
     price: 649,
-    image: "/Products/Mandarin & Banarasi Collars.png",
+    image: "/Products/Mandarin_Banarasi_Collars.png",
     sizes: ["S", "M", "L", "XL"],
     delivery: "Standard: 5-7 days, Express: 2-3 days"
   },
