@@ -6,7 +6,6 @@ import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
 import Chatbot from '@/components/Chatbot';
 import CartDrawer from '@/components/CartDrawer';
-import { useAuth } from '@/context/AuthContext';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

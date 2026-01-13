@@ -56,7 +56,7 @@ export default function CheckoutPage() {
           <span className="material-symbols-outlined success-icon">check_circle</span>
           <h1>Order Placed Successfully!</h1>
           <p>Thank you for shopping with Advakkad Collections.</p>
-          <p>Your order ID is <strong>#ORD-{Math.floor(Math.random() * 10000)}</strong></p>
+          <p>Your order ID is <strong>#ORD-7821</strong></p>
           <div className="success-actions">
             <Link href="/account" className="btn btn-secondary">View Order</Link>
             <Link href="/" className="btn btn-primary">Continue Shopping</Link>
