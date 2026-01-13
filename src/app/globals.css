@@ -251,6 +251,25 @@ section {
   display: none;
 }
 
+.nav-link.signin-btn {
+  background: #333; /* Dark background for account action */
+  color: white;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+  margin-left: 0.5rem; /* Gap between buttons */
+}
+
+.nav-link.signin-btn:hover {
+  background: #000;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.nav-link.signin-btn::after {
+  display: none;
+}
+
 .menu-toggle {
   display: none;
   flex-direction: column;
