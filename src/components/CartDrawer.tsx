@@ -116,7 +116,6 @@ export default function CartDrawer() {
                        </div>
                      </div>
                    </div>
-                   </div>
                    
                    <button
                      onClick={() => removeFromCart(item.id, item.size, item.age)}
