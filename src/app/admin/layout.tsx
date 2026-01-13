@@ -77,6 +77,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       ]
     },
     {
+      title: "Marketing",
+      items: [
+        { name: "Social Media", icon: "share", path: "/admin/social", type: 'link' }
+      ]
+    },
+    {
       title: 'System',
       items: [
         { name: 'Management', icon: 'manage_accounts', type: 'sub', subItems: [
