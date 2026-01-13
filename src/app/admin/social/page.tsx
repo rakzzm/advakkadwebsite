@@ -2,20 +2,32 @@
 
 import { useState, useRef } from 'react';
 
-export default function SocialPage() {
-  const [isConnected, setIsConnected] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [caption, setCaption] = useState('');
-  const [isPosting, setIsPosting] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // Mock Social Profile Data
+  const [profile, setProfile] = useState<{followers: string; posts: string} | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0];
-      setFile(selectedFile);
-      setPreviewUrl(URL.createObjectURL(selectedFile));
+  const handleConnectClick = () => {
+    if (isConnected) {
+      if (confirm('Are you sure you want to disconnect?')) {
+        setIsConnected(false);
+        setProfile(null);
+      }
+    } else {
+      setShowLoginModal(true);
     }
+  };
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoggingIn(true);
+    // Simulate auth API
+    setTimeout(() => {
+       setIsLoggingIn(false);
+       setShowLoginModal(false);
+       setIsConnected(true);
+       setProfile({ followers: '12.4k', posts: '342' });
+    }, 1500);
   };
 
   const handlePost = () => {
@@ -29,10 +41,12 @@ export default function SocialPage() {
     // Simulate API delay
     setTimeout(() => {
       setIsPosting(false);
-      alert('Successfully Uploaded Reel to Instagram! 📸');
+      alert('Successfully Uploaded Reel to Instagram! 📸\nCheck your feed in a few seconds.');
       setFile(null);
       setPreviewUrl(null);
       setCaption('');
+      // Update mock posts count
+      if (profile) setProfile({...profile, posts: (parseInt(profile.posts) + 1).toString()});
     }, 2500);
   };
 
@@ -43,13 +57,21 @@ export default function SocialPage() {
            <h1 className="page-title">Social Media Manager</h1>
            <p className="subtitle">Create and schedule posts for your social channels.</p>
         </div>
-        <button 
-          className={`connect-btn ${isConnected ? 'connected' : ''}`}
-          onClick={() => setIsConnected(!isConnected)}
-        >
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" alt="Insta" width="24" />
-          {isConnected ? 'Connected (@adavakkad)' : 'Connect Instagram'}
-        </button>
+        <div className="account-status">
+            {isConnected && profile && (
+              <div className="stats-badge">
+                 <span><strong>{profile.followers}</strong> Followers</span>
+                 <span><strong>{profile.posts}</strong> Posts</span>
+              </div>
+            )}
+            <button 
+              className={`connect-btn ${isConnected ? 'connected' : ''}`}
+              onClick={handleConnectClick}
+            >
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" alt="Insta" width="24" />
+              {isConnected ? 'Connected (@adavakkad)' : 'Connect Instagram'}
+            </button>
+        </div>
       </div>
 
       <div className="grid-layout">
@@ -134,11 +156,36 @@ export default function SocialPage() {
         </div>
       </div>
 
+      {/* Mock Login Modal */}
+      {showLoginModal && (
+        <div className="modal-overlay">
+          <div className="login-modal">
+             <div className="modal-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1280px-Instagram_logo.svg.png" alt="Instagram" width="120" />
+             </div>
+             <form onSubmit={handleLoginSubmit}>
+               <input type="text" placeholder="Phone number, username, or email" required defaultValue="adavakkad_collections" />
+               <input type="password" placeholder="Password" required />
+               <button type="submit" disabled={isLoggingIn}>
+                 {isLoggingIn ? 'Logging in...' : 'Log In'}
+               </button>
+               <div className="divider">OR</div>
+               <button type="button" className="facebook-login">Log in with Facebook</button>
+               <p className="forgot-password">Forgot password?</p>
+             </form>
+             <button className="close-modal" onClick={() => setShowLoginModal(false)}>Close Simulation</button>
+          </div>
+        </div>
+      )}
+
       <style jsx>{`
-        .social-page { padding-bottom: 2rem; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .social-page { padding-bottom: 2rem; position: relative; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
         .page-title { font-family: var(--font-playfair); font-size: 2rem; margin: 0; color: #1a1a1a; }
         .subtitle { color: #666; margin: 0.5rem 0 0 0; }
+        
+        .account-status { display: flex; align-items: center; gap: 1.5rem; }
+        .stats-badge { display: flex; gap: 1rem; color: #333; font-size: 0.9rem; background: white; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #eee; }
         
         .connect-btn { 
           display: flex; align-items: center; gap: 0.8rem; 
@@ -159,7 +206,9 @@ export default function SocialPage() {
         .upload-area .icon { font-size: 3rem; color: #ccc; margin-bottom: 1rem; display: block; }
         .upload-area p { margin: 0; font-weight: 500; color: #333; }
         .upload-area span { font-size: 0.8rem; color: #999; }
-        .file-info .icon { color: #10b981; }
+        .file-info { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .file-info .icon { color: #10b981; font-size: 2rem; margin: 0; }
+        .remove-btn { background: none; border: 1px solid #ddd; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-top: 0.5rem; }
 
         .form-group { margin-bottom: 2rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333; }
@@ -189,6 +238,22 @@ export default function SocialPage() {
 
         .screen-caption { padding: 0 0.8rem 1rem; font-size: 0.85rem; line-height: 1.4; }
         .username { font-weight: 600; margin-right: 0.5rem; }
+
+        /* Login Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .login-modal { background: white; width: 350px; padding: 2.5rem 2rem; border-radius: 4px; text-align: center; border: 1px solid #ddd; }
+        .modal-header { margin-bottom: 2rem; }
+        .login-modal input { width: 100%; padding: 0.5rem 0.8rem; margin-bottom: 0.6rem; border: 1px solid #ddd; border-radius: 3px; font-size: 0.85rem; background: #fafafa; }
+        .login-modal button[type="submit"] { width: 100%; background: #0095f6; color: white; border: none; padding: 0.5rem; border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 1rem; font-size: 0.9rem; }
+        .login-modal button[type="submit"]:disabled { opacity: 0.7; }
+        
+        .divider { margin: 1.5rem 0; font-size: 0.8rem; color: #999; font-weight: 600; display: flex; align-items: center; gap: 1rem; }
+        .divider::before, .divider::after { content: ''; height: 1px; background: #ddd; flex: 1; }
+        
+        .facebook-login { background: none; border: none; color: #385185; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: block; width: 100%; margin-bottom: 1rem; }
+        .forgot-password { font-size: 0.75rem; color: #00376b; cursor: pointer; }
+        
+        .close-modal { margin-top: 2rem; background: none; border: none; color: #999; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
       `}</style>
     </div>
   );
