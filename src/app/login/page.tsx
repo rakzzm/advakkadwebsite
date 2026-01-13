@@ -75,10 +75,6 @@ export default function LoginPage() {
 
           <div className="login-footer">
             <p>Don't have an account? <Link href="/signup">Sign Up</Link></p>
-            <p className="hint">
-              <strong>Demo Admin:</strong> admin@advakkad.com / admin123<br/>
-              <strong>Demo User:</strong> user@example.com / user123
-            </p>
           </div>
         </form>
       </div>
