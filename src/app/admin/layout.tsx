@@ -123,6 +123,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .sidebar-nav {
           flex: 1;
           padding: 1rem 0;
+          display: flex;
+          flex-direction: column;
         }
 
         .nav-item {
