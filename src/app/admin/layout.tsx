@@ -81,8 +81,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       items: [
         { name: 'Profile', icon: 'person', type: 'sub', subItems: [{ name: 'My Profile', path: '/admin/profile' }] },
         { name: 'User', icon: 'manage_accounts', type: 'sub', subItems: [{ name: 'User List', path: '/admin/users' }] },
-        { name: 'Authentication', icon: 'lock', type: 'sub', subItems: [{ name: 'Login', path: '/login' }] },
-        { name: 'Error Pages', icon: 'error', type: 'sub', subItems: [{ name: '404 Error', path: '/404' }] },
         { name: 'Setting', icon: 'settings', type: 'sub', subItems: [{ name: 'General Settings', path: '/admin/settings' }] },
         { name: 'FAQ', icon: 'help', type: 'sub', subItems: [{ name: 'FAQ List', path: '/admin/faq' }] },
       ]
