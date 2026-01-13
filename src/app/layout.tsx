@@ -1,10 +1,11 @@
-import type { Metadata } from 'next';
-import './globals.css';
 import { Inter, Playfair_Display, Outfit } from "next/font/google";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/Sidebar';
 import Chatbot from '@/components/Chatbot';
+import { CartProvider } from '@/context/CartContext';
+import CartDrawer from '@/components/CartDrawer';
 import { AuthProvider } from '@/context/AuthContext';
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
@@ -28,11 +29,14 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${playfair.variable} ${outfit.variable}`}>
         <AuthProvider>
-          <Navbar />
-          <Sidebar />
-          {children}
-          <Footer />
-          <Chatbot />
+          <CartProvider>
+            <Navbar />
+            <Sidebar />
+            <CartDrawer />
+            {children}
+            <Footer />
+            <Chatbot />
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

@@ -1,169 +1,399 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function CheckoutPage() {
-  const router = useRouter();
   const { items, total, clearCart } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
+    name: user?.name || '',
+    email: user?.email || '',
     address: '',
     city: '',
     zip: '',
+    phone: ''
   });
   const [paymentMethod, setPaymentMethod] = useState('cod');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name,
+        email: user.email
+      }));
+    }
+  }, [user]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setIsProcessing(true);
+
     // Simulate API call
-    setTimeout(() => {
-      alert(`Order Placed Successfully!\n\nOrder ID: #${Math.floor(Math.random() * 100000)}\nAmount: ₹${total}\nPayment: ${paymentMethod.toUpperCase()}`);
-      clearCart();
-      router.push('/');
-    }, 1500);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    setIsProcessing(false);
+    setOrderPlaced(true);
+    clearCart();
   };
+
+  if (orderPlaced) {
+    return (
+      <div className="checkout-container success">
+        <div className="success-content">
+          <span className="material-symbols-outlined success-icon">check_circle</span>
+          <h1>Order Placed Successfully!</h1>
+          <p>Thank you for shopping with Advakkad Collections.</p>
+          <p>Your order ID is <strong>#ORD-{Math.floor(Math.random() * 10000)}</strong></p>
+          <div className="success-actions">
+            <Link href="/account" className="btn btn-secondary">View Order</Link>
+            <Link href="/" className="btn btn-primary">Continue Shopping</Link>
+          </div>
+        </div>
+        <style jsx>{`
+          .checkout-container.success {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          }
+          .success-icon {
+            font-size: 5rem;
+            color: #d32f2f;
+            margin-bottom: 1rem;
+          }
+          .success-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+          }
+          .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+          }
+          .btn-primary { background: #d32f2f; color: white; }
+          .btn-secondary { background: #1a1a1a; color: white; }
+        `}</style>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
-      <div className="container" style={{ marginTop: '120px', textAlign: 'center', minHeight: '50vh' }}>
-         <h2>Your cart is empty</h2>
-         <p>Add some products to proceed to checkout.</p>
-         <button onClick={() => router.push('/products')} className="btn-primary" style={{ marginTop: '1rem' }}>
-           Browse Products
-         </button>
+      <div className="empty-cart-container">
+        <h2>Your Cart is Empty</h2>
+        <Link href="/" className="btn-primary">Start Shopping</Link>
+        <style jsx>{`
+          .empty-cart-container {
+            text-align: center;
+            padding: 5rem 0;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+          .btn-primary {
+            background: #d32f2f;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+          }
+        `}</style>
       </div>
     );
   }
 
   return (
-    <section style={{ marginTop: '100px', marginBottom: '60px' }}>
+    <div className="checkout-page">
       <div className="container">
-        <h1 className="section-title text-center" style={{ marginBottom: '2rem' }}>Checkout</h1>
-
-        <div className="grid grid-2" style={{ alignItems: 'start' }}>
-          {/* Shipping Details */}
-          <div className="card">
-            <h3 style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>Shipping Details</h3>
-            
-            <form id="checkout-form" onSubmit={handleSubmit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>First Name *</label>
-                  <input required name="firstName" value={formData.firstName} onChange={handleInputChange} type="text" className="filter-input" style={{ width: '100%' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>Last Name *</label>
-                  <input required name="lastName" value={formData.lastName} onChange={handleInputChange} type="text" className="filter-input" style={{ width: '100%' }} />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>Email Address *</label>
-                <input required name="email" value={formData.email} onChange={handleInputChange} type="email" className="filter-input" style={{ width: '100%' }} />
-              </div>
-
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>Phone Number *</label>
-                <input required name="phone" value={formData.phone} onChange={handleInputChange} type="tel" className="filter-input" style={{ width: '100%' }} />
-              </div>
-
-              <div style={{ marginBottom: '1rem' }}>
-                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>Address *</label>
-                 <input required name="address" value={formData.address} onChange={handleInputChange} type="text" className="filter-input" style={{ width: '100%' }} placeholder="Street, House No, etc." />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>City *</label>
-                  <input required name="city" value={formData.city} onChange={handleInputChange} type="text" className="filter-input" style={{ width: '100%' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>ZIP Code *</label>
-                  <input required name="zip" value={formData.zip} onChange={handleInputChange} type="text" className="filter-input" style={{ width: '100%' }} />
-                </div>
-              </div>
-
-              <h3 style={{ marginBottom: '1rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>Payment Method</h3>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '15px', border: paymentMethod === 'cod' ? '2px solid var(--color-primary)' : '1px solid #eee', borderRadius: '8px', cursor: 'pointer', background: paymentMethod === 'cod' ? '#f0f4ff' : 'white' }}>
-                  <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} />
-                  <span style={{ fontWeight: 600 }}>Cash on Delivery (COD)</span>
-                </label>
-
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '15px', border: paymentMethod === 'upi' ? '2px solid var(--color-primary)' : '1px solid #eee', borderRadius: '8px', cursor: 'pointer', background: paymentMethod === 'upi' ? '#f0f4ff' : 'white' }}>
-                  <input type="radio" name="payment" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
-                  <span>UPI / QR Code</span>
-                </label>
-
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '15px', border: paymentMethod === 'card' ? '2px solid var(--color-primary)' : '1px solid #eee', borderRadius: '8px', cursor: 'pointer', background: paymentMethod === 'card' ? '#f0f4ff' : 'white' }}>
-                   <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} />
-                   <span>Credit / Debit Card</span>
-                </label>
-              </div>
-
-              {/* Fake Card inputs if Card selected */}
-              {paymentMethod === 'card' && (
-                <div style={{ marginTop: '1rem', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
-                  <input type="text" placeholder="Card Number" className="filter-input" style={{ width: '100%', marginBottom: '0.5rem' }} />
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                    <input type="text" placeholder="MM/YY" className="filter-input" style={{ width: '100%' }} />
-                    <input type="text" placeholder="CVC" className="filter-input" style={{ width: '100%' }} />
+        <h1 className="page-title">Checkout</h1>
+        
+        <div className="checkout-grid">
+          {/* Shipping Form */}
+          <div className="form-section">
+            <div className="section-card">
+              <h2>Shipping Information</h2>
+              <form onSubmit={handleSubmit} id="checkout-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                  </div>
+                  <div className="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
                   </div>
                 </div>
-              )}
 
-            </form>
+                <div className="form-group">
+                  <label>Email Address</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                </div>
+
+                <div className="form-group">
+                  <label>Address</label>
+                  <input type="text" name="address" value={formData.address} onChange={handleChange} required placeholder="Street, House No." />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>City</label>
+                    <input type="text" name="city" value={formData.city} onChange={handleChange} required />
+                  </div>
+                  <div className="form-group">
+                    <label>ZIP / Pincode</label>
+                    <input type="text" name="zip" value={formData.zip} onChange={handleChange} required />
+                  </div>
+                </div>
+
+                <div className="payment-section">
+                   <h3>Payment Method</h3>
+                   <div className="payment-options">
+                     <label className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}>
+                       <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} />
+                       <span>Cash on Delivery</span>
+                     </label>
+                     <label className={`payment-option ${paymentMethod === 'upi' ? 'selected' : ''}`}>
+                       <input type="radio" name="payment" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
+                       <span>UPI / QR</span>
+                     </label>
+                     <label className={`payment-option ${paymentMethod === 'card' ? 'selected' : ''}`}>
+                       <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} />
+                       <span>Credit/Debit Card</span>
+                     </label>
+                   </div>
+                </div>
+              </form>
+            </div>
           </div>
 
           {/* Order Summary */}
-          <div className="card" style={{ position: 'sticky', top: '100px' }}>
-             <h3 style={{ marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>Order Summary</h3>
-             
-             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
-               {items.map((item, idx) => (
-                 <div key={`${item.id}-${idx}`} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-                    <span>{item.quantity}x {item.name} <small style={{ color: 'gray' }}>({item.size})</small></span>
-                    <span style={{ fontWeight: 600 }}>₹{item.price * item.quantity}</span>
-                 </div>
-               ))}
-             </div>
-
-             <div style={{ borderTop: '1px dashed #ccc', paddingTop: '1rem', marginTop: 'auto' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+          <div className="summary-section">
+            <div className="section-card summary-card">
+              <h2>Order Summary</h2>
+              <div className="summary-items">
+                {items.map((item, idx) => (
+                  <div key={`${item.id}-${idx}`} className="summary-item">
+                    <div className="item-info">
+                       <span className="item-name">{item.name}</span>
+                       <span className="item-qty">x {item.quantity}</span>
+                    </div>
+                    <span className="item-price">₹ {item.price * item.quantity}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="summary-totals">
+                <div className="summary-row">
                   <span>Subtotal</span>
-                  <span>₹{total}</span>
+                  <span>₹ {total}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', color: 'green' }}>
+                <div className="summary-row">
                   <span>Shipping</span>
-                  <span>FREE</span>
+                  <span>Free</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 700, borderTop: '2px solid #eee', paddingTop: '1rem' }}>
-                  <span>Grand Total</span>
-                  <span>₹{total.toLocaleString('en-IN')}</span>
+                <div className="summary-row total">
+                  <span>Total</span>
+                  <span>₹ {total}</span>
                 </div>
-             </div>
+              </div>
 
-             <button type="submit" form="checkout-form" className="btn-primary" style={{ width: '100%', marginTop: '2rem' }}>
-               Place Order
-             </button>
-             
-             <p style={{ textAlign: 'center', fontSize: '0.8rem', marginTop: '1rem', color: 'gray' }}>
-               Secure Checkout powered by Advakkad
-             </p>
+              <button 
+                type="submit" 
+                form="checkout-form" 
+                className="place-order-btn"
+                disabled={isProcessing}
+              >
+                {isProcessing ? 'Processing...' : 'Place Order'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+
+      <style jsx>{`
+        .checkout-page {
+          background: #f9f9f9;
+          padding: 3rem 0;
+          min-height: 80vh;
+        }
+
+        .page-title {
+          font-family: var(--font-playfair);
+          font-size: 2rem;
+          margin-bottom: 2rem;
+          color: #1a1a1a;
+        }
+
+        .checkout-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+          .checkout-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .section-card {
+           background: white;
+           padding: 2rem;
+           border-radius: 12px;
+           box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .section-card h2 {
+           font-size: 1.25rem;
+           margin-bottom: 1.5rem;
+           color: #1a1a1a;
+           border-bottom: 1px solid #eee;
+           padding-bottom: 0.5rem;
+        }
+
+        .form-row {
+           display: grid;
+           grid-template-columns: 1fr 1fr;
+           gap: 1rem;
+        }
+
+        .form-group {
+           margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+           display: block;
+           margin-bottom: 0.5rem;
+           color: #555;
+           font-weight: 500;
+           font-size: 0.9rem;
+        }
+
+        .form-group input {
+           width: 100%;
+           padding: 0.75rem;
+           border: 1px solid #ddd;
+           border-radius: 6px;
+           font-size: 1rem;
+        }
+
+        .form-group input:focus {
+           border-color: #d32f2f;
+           outline: none;
+        }
+
+        .payment-section {
+           margin-top: 2rem;
+        }
+
+        .payment-options {
+           display: flex;
+           flex-direction: column;
+           gap: 0.75rem;
+        }
+
+        .payment-option {
+           border: 1px solid #eee;
+           padding: 1rem;
+           border-radius: 8px;
+           display: flex;
+           align-items: center;
+           gap: 0.75rem;
+           cursor: pointer;
+           transition: all 0.2s;
+        }
+
+        .payment-option.selected {
+           border-color: #d32f2f;
+           background: #fff5f5;
+        }
+
+        .summary-items {
+           margin-bottom: 1.5rem;
+           max-height: 300px;
+           overflow-y: auto;
+        }
+
+        .summary-item {
+           display: flex;
+           justify-content: space-between;
+           margin-bottom: 0.75rem;
+           color: #555;
+        }
+
+        .item-info {
+           display: flex;
+           flex-direction: column;
+        }
+
+        .item-name { font-weight: 500; color: #333; }
+        .item-qty { font-size: 0.85rem; color: #888; }
+        .item-price { font-weight: 600; }
+
+        .summary-totals {
+           border-top: 1px solid #eee;
+           padding-top: 1rem;
+        }
+
+        .summary-row {
+           display: flex;
+           justify-content: space-between;
+           margin-bottom: 0.5rem;
+           color: #666;
+        }
+
+        .summary-row.total {
+           font-size: 1.25rem;
+           font-weight: 700;
+           color: #1a1a1a;
+           margin-top: 1rem;
+           border-top: 1px solid #eee;
+           padding-top: 1rem;
+        }
+
+        .place-order-btn {
+           width: 100%;
+           background: #d32f2f;
+           color: white;
+           border: none;
+           padding: 1rem;
+           border-radius: 6px;
+           font-size: 1rem;
+           font-weight: 600;
+           cursor: pointer;
+           margin-top: 1.5rem;
+        }
+
+        .place-order-btn:hover {
+           background: #b71c1c;
+        }
+
+        .place-order-btn:disabled {
+           background: #ccc;
+           cursor: not-allowed;
+        }
+      `}</style>
+    </div>
   );
 }
