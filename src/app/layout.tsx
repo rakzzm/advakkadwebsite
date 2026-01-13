@@ -8,7 +8,14 @@ import { ProductProvider } from '@/context/ProductContext';
 import { CustomerProvider } from '@/context/CustomerContext';
 import { BuyerProvider } from '@/context/BuyerContext';
 
-// ... (imports remain same)
+const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-playfair' });
+const outfit = Outfit({ subsets: ["latin"], variable: '--font-outfit' });
+
+export const metadata: Metadata = {
+  title: 'Adavakkad Collections Wedding Center',
+  description: 'Premium digital solutions and quality clothing for modern businesses and families.',
+};
 
 export default function RootLayout({
   children,
