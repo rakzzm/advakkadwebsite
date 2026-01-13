@@ -5,15 +5,15 @@ import Image from 'next/image';
 
 // Gallery data
 const galleryImages = [
-  { src: '/gallery/Fabric Collections.png', title: 'Fabric Collections', description: 'Extensive Range of Sarees', category: 'store', type: 'normal' },
-  { src: '/gallery/Store Interior.png', title: 'Store Interior', description: 'Premium Shopping Experience', category: 'store', type: 'normal' },
-  { src: '/gallery/Store View.png', title: 'Store View', description: 'Wide Collection Display', category: 'store', type: 'tall' },
-  { src: '/gallery/Shopping Area.png', title: 'Shopping Area', description: 'Comfortable Browsing Space', category: 'store', type: 'normal' },
-  { src: '/gallery/Saree Collection.png', title: 'Saree Collection', description: 'Traditional & Designer', category: 'collections', type: 'normal' },
-  { src: '/gallery/Traditional Wear.png', title: 'Traditional Wear', description: 'Kerala Kasavu Saree', category: 'wedding', type: 'tall' },
-  { src: '/gallery/Wedding Collection.png', title: 'Wedding Collection', description: 'Bridal Special', category: 'wedding', type: 'wide' },
-  { src: '/gallery/Festival Special.png', title: 'Festival Special', description: 'Vibrant Colors', category: 'collections', type: 'normal' },
-  { src: '/gallery/Traditional Elegance.png', title: 'Traditional Elegance', description: 'Bridal Collection', category: 'wedding', type: 'normal' }
+  { src: '/Gallery/Fabric_Collections.png', title: 'Fabric Collections', description: 'Extensive Range of Sarees', category: 'store', type: 'normal' },
+  { src: '/Gallery/Store_Interior.png', title: 'Store Interior', description: 'Premium Shopping Experience', category: 'store', type: 'normal' },
+  { src: '/Gallery/Store_View.png', title: 'Store View', description: 'Wide Collection Display', category: 'store', type: 'tall' },
+  { src: '/Gallery/Shopping_Area.png', title: 'Shopping Area', description: 'Comfortable Browsing Space', category: 'store', type: 'normal' },
+  { src: '/Gallery/Saree_Collection.png', title: 'Saree Collection', description: 'Traditional & Designer', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Traditional_Wear.png', title: 'Traditional Wear', description: 'Kerala Kasavu Saree', category: 'wedding', type: 'tall' },
+  { src: '/Gallery/Wedding_Collection.png', title: 'Wedding Collection', description: 'Bridal Special', category: 'wedding', type: 'wide' },
+  { src: '/Gallery/Festival_Special.png', title: 'Festival Special', description: 'Vibrant Colors', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Traditional_Elegance.png', title: 'Traditional Elegance', description: 'Bridal Collection', category: 'wedding', type: 'normal' }
 ];
 
 export default function GalleryGrid() {
@@ -23,12 +23,10 @@ export default function GalleryGrid() {
   const openLightbox = (index: number) => {
     setCurrentIndex(index);
     setLightboxOpen(true);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeLightbox = () => {
     setLightboxOpen(false);
-    document.body.style.overflow = 'auto';
   };
 
   const changeImage = (direction: number) => {
@@ -38,17 +36,43 @@ export default function GalleryGrid() {
     setCurrentIndex(newIndex);
   };
 
+  // Handle body scroll locking
+  useEffect(() => {
+    if (lightboxOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [lightboxOpen]);
+
+  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lightboxOpen) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') changeImage(-1);
-      if (e.key === 'ArrowRight') changeImage(1);
+      if (e.key === 'Escape') setLightboxOpen(false);
+      
+      // We accept that changeImage is closed over current state here
+      // Alternatively we could use functional state updates, but this logic is simple enough
+      if (e.key === 'ArrowLeft') {
+         setCurrentIndex(prev => {
+            const newIndex = prev - 1;
+            return newIndex < 0 ? galleryImages.length - 1 : newIndex;
+         });
+      }
+      if (e.key === 'ArrowRight') {
+         setCurrentIndex(prev => {
+            const newIndex = prev + 1;
+            return newIndex >= galleryImages.length ? 0 : newIndex;
+         });
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen, currentIndex]);
+  }, [lightboxOpen]);
 
   return (
     <>
