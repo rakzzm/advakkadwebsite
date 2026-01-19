@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-export default function AdminPlaceholderPage({ params }: { params: { slug: string[] } }) {
+export default function AdminPlaceholderPage() {
   const pathname = usePathname();
   
   // Convert slug array to title (e.g., ['products', 'add'] -> "Products Add")

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCustomers, Customer } from '@/context/CustomerContext';
+import { useCustomers } from '@/context/CustomerContext';
 
 export default function AdminCustomers() {
   const router = useRouter();

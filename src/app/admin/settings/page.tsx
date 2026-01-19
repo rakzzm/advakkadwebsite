@@ -5,10 +5,10 @@ import { useState } from 'react';
 export default function AdminSettings() {
   const [activeTab, setActiveTab] = useState('general');
   const [formData, setFormData] = useState({
-    siteName: 'Advakkad Collections',
-    adminEmail: 'admin@advakkad.com',
+    siteName: 'Adavakkad Collections',
+    adminEmail: 'admin@adavakkad.com',
     currency: 'INR',
-    metaTitle: 'Advakkad Collections - Premium Wedding Center',
+    metaTitle: 'Adavakkad Collections - Premium Wedding Center',
     metaDescription: 'Shop the best wedding collections and ethnic wear.',
     facebook: 'https://facebook.com',
     instagram: 'https://instagram.com'

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 
 export default function SocialPage() {
   const [isConnected, setIsConnected] = useState(false);
@@ -84,8 +85,8 @@ export default function SocialPage() {
               className={`connect-btn ${isConnected ? 'connected' : ''}`}
               onClick={handleConnectClick}
             >
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" alt="Insta" width="24" />
-              {isConnected ? 'Connected (@adavakkad)' : 'Connect Instagram'}
+              <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" alt="Insta" width={24} height={24} unoptimized />
+              {isConnected ? 'Connected (@Adavakkad)' : 'Connect Instagram'}
             </button>
         </div>
       </div>
@@ -148,7 +149,7 @@ export default function SocialPage() {
               <div className="notch"></div>
               <div className="screen">
                  <div className="screen-header">
-                    <img src="/logo/admin-logo.jpg" alt="Profile" className="avatar" />
+                    <Image src="/logo/admin-logo.jpg" alt="Profile" className="avatar" width={32} height={32} />
                     <span>adavakkad_collections</span>
                     <span className="material-symbols-outlined more">more_horiz</span>
                  </div>
@@ -177,7 +178,7 @@ export default function SocialPage() {
         <div className="modal-overlay">
           <div className="login-modal">
              <div className="modal-header">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1280px-Instagram_logo.svg.png" alt="Instagram" width="120" />
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1280px-Instagram_logo.svg.png" alt="Instagram" width={120} height={40} unoptimized style={{ height: 'auto' }} />
              </div>
              <form onSubmit={handleLoginSubmit}>
                <input type="text" placeholder="Phone number, username, or email" required defaultValue="adavakkad_collections" />

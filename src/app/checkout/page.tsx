@@ -4,13 +4,10 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart();
   const { user } = useAuth();
-  const router = useRouter();
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -25,11 +22,14 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (user) {
-      setFormData(prev => ({
-        ...prev,
-        name: user.name,
-        email: user.email
-      }));
+      const timer = setTimeout(() => {
+        setFormData(prev => ({
+          ...prev,
+          name: user.name,
+          email: user.email
+        }));
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [user]);
 
@@ -55,7 +55,7 @@ export default function CheckoutPage() {
         <div className="success-content">
           <span className="material-symbols-outlined success-icon">check_circle</span>
           <h1>Order Placed Successfully!</h1>
-          <p>Thank you for shopping with Advakkad Collections.</p>
+          <p>Thank you for shopping with Adavakkad Collections.</p>
           <p>Your order ID is <strong>#ORD-7821</strong></p>
           <div className="success-actions">
             <Link href="/account" className="btn btn-secondary">View Order</Link>

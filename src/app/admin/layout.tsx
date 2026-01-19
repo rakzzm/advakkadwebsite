@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -111,7 +112,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
            <div className="brand-logo">
              {/* <span className="material-symbols-outlined logo-icon">diamond</span> */}
              <div className="brand-text">
-                <img src="/logo/admin-logo.jpg" alt="Advakkad Admin" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                  <Image src="/logo/admin-logo.jpg" alt="Adavakkad Admin" fill style={{ objectFit: 'contain' }} />
+                </div>
              </div>
            </div>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export type Buyer = {
   id: number;
@@ -30,18 +31,7 @@ const INITIAL_BUYERS: Buyer[] = [
 ];
 
 export function BuyerProvider({ children }: { children: ReactNode }) {
-  const [buyers, setBuyers] = useState<Buyer[]>(INITIAL_BUYERS);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem('advakkad_buyers');
-    if (saved) setBuyers(JSON.parse(saved));
-  }, []);
-
-  // Save to localStorage
-  useEffect(() => {
-    localStorage.setItem('advakkad_buyers', JSON.stringify(buyers));
-  }, [buyers]);
+  const [buyers, setBuyers] = useLocalStorage<Buyer[]>('advakkad_buyers', INITIAL_BUYERS);
 
   const addBuyer = (buyerData: Omit<Buyer, 'id' | 'history'>) => {
     const newBuyer: Buyer = {

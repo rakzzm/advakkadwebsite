@@ -41,7 +41,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p>
-            &copy; 2026 Advakkad. All rights reserved. Built with innovation and
+            &copy; 2026 Adavakkad. All rights reserved. Built with innovation and
             passion.
           </p>
         </div>

@@ -23,7 +23,7 @@ export default function AdminSegments() {
     setFormData({ name: '', criteria: '' });
   };
 
-  const viewUsers = (segmentName: string) => {
+  const viewUsers = () => {
     // In a real app this would pass a query param
     router.push('/admin/customers'); 
   };
@@ -52,7 +52,7 @@ export default function AdminSegments() {
               <span className="count">{getCount(segment.name)}</span>
               <span className="label">Users</span>
             </div>
-            <button className="view-btn" onClick={() => viewUsers(segment.name)}>View Users</button>
+            <button className="view-btn" onClick={() => viewUsers()}>View Users</button>
           </div>
         ))}
       </div>

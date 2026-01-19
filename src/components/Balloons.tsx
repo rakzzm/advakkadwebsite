@@ -24,7 +24,11 @@ export default function Balloons() {
       delay: Math.random() * 10, // 0-10s delay start
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
     }));
-    setBalloons(newBalloons);
+    // Use setTimeout to avoid synchronous setState warning and ensure client-side render
+    const timer = setTimeout(() => {
+        setBalloons(newBalloons);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const popBalloon = (id: number) => {
@@ -38,7 +42,7 @@ export default function Balloons() {
       } : b)
     );
     // Simple visual interaction - could be enhanced with pop sound or particle effect
-    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3'); // Optional sound
+    // const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3'); // Optional sound
     // audio.play().catch(() => {}); 
   };
 

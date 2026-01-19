@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export type Product = {
   id: number;
@@ -36,20 +37,7 @@ const INITIAL_PRODUCTS: Product[] = [
 ];
 
 export function ProductProvider({ children }: { children: ReactNode }) {
-  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem('advakkad_products');
-    if (saved) {
-      setProducts(JSON.parse(saved));
-    }
-  }, []);
-
-  // Save to localStorage on change
-  useEffect(() => {
-    localStorage.setItem('advakkad_products', JSON.stringify(products));
-  }, [products]);
+  const [products, setProducts] = useLocalStorage<Product[]>('advakkad_products', INITIAL_PRODUCTS);
 
   const addProduct = (newProduct: Omit<Product, 'id'>) => {
     const id = Date.now(); // Simple ID generation

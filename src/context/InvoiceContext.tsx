@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export type Invoice = {
   id: string;
@@ -28,18 +29,7 @@ const INITIAL_INVOICES: Invoice[] = [
 ];
 
 export function InvoiceProvider({ children }: { children: ReactNode }) {
-  const [invoices, setInvoices] = useState<Invoice[]>(INITIAL_INVOICES);
-
-  // Load from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('advakkad_invoices');
-    if (saved) setInvoices(JSON.parse(saved));
-  }, []);
-
-  // Save to localStorage
-  useEffect(() => {
-    localStorage.setItem('advakkad_invoices', JSON.stringify(invoices));
-  }, [invoices]);
+  const [invoices, setInvoices] = useLocalStorage<Invoice[]>('advakkad_invoices', INITIAL_INVOICES);
 
   const addInvoice = (data: Omit<Invoice, 'id'>) => {
     const newId = `INV-2026-${Math.floor(100 + Math.random() * 900)}`;

@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useRouter } from 'next/navigation';
 
 // Define User Type
@@ -24,26 +25,12 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser, isInitialized] = useLocalStorage<User | null>('advakkad_user', null);
+  const isLoading = !isInitialized;
   const router = useRouter();
-
-  // Load user from localStorage on mount
-  useEffect(() => {
-    const storedUser = localStorage.getItem('advakkad_user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Failed to parse user data', error);
-      }
-    }
-    setIsLoading(false);
-  }, []);
 
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('advakkad_user', JSON.stringify(userData));
     
     // Redirect based on role
     if (userData.role === 'admin') {
@@ -55,7 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('advakkad_user');
     router.push('/login');
   };
 

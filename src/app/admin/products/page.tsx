@@ -194,7 +194,7 @@ export default function AdminProducts() {
                   <label>Category</label>
                   <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
                     <option value="women">Women</option>
-                    <option value="mens">Men's</option>
+                    <option value="mens">Men&apos;s</option>
                     <option value="kids">Kids</option>
                     <option value="silk-sarees">Silk Sarees</option>
                     <option value="traditional">Traditional</option>
@@ -216,7 +216,7 @@ export default function AdminProducts() {
                 <div className="form-group full-width">
                   <label>Product Image</label>
                   <input type="file" accept="image/*" onChange={handleImageUpload} />
-                  {formData.image && <img src={formData.image} alt="Preview" className="img-preview" />}
+                  {formData.image && <Image src={formData.image} alt="Preview" width={100} height={100} style={{ objectFit: 'cover', marginTop: '0.5rem', borderRadius: '4px', border: '1px solid #ddd' }} />}
                 </div>
               </div>
               <div className="modal-actions">

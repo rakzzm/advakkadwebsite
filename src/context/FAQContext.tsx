@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export type FAQ = {
   id: string;
@@ -44,21 +45,7 @@ const INITIAL_FAQS: FAQ[] = [
 ];
 
 export function FAQProvider({ children }: { children: ReactNode }) {
-  const [faqs, setFaqs] = useState<FAQ[]>(INITIAL_FAQS);
-
-  // Load from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('advakkad_faqs');
-    if (saved) {
-      setFaqs(JSON.parse(saved));
-    }
-  }, []);
-
-  // Save to localStorage and Sync across tabs
-  useEffect(() => {
-    localStorage.setItem('advakkad_faqs', JSON.stringify(faqs));
-    // Dispatch storage event for other components if needed (though Context handles internal app sync)
-  }, [faqs]);
+  const [faqs, setFaqs] = useLocalStorage<FAQ[]>('advakkad_faqs', INITIAL_FAQS);
 
   const addFAQ = (data: Omit<FAQ, 'id'>) => {
     const newFAQ = { ...data, id: `faq_${Date.now()}` };

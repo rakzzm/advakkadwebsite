@@ -19,27 +19,31 @@ export default function AdminDashboard() {
 
   // Simulating data fetch based on date filter
   useEffect(() => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      // Randomize data slightly to show "change"
-      const multiplier = dateRange === 'today' ? 0.05 : 
-                         dateRange === 'yesterday' ? 0.08 : 
-                         dateRange === '7d' ? 0.25 : 
-                         dateRange === '30d' ? 1 : 
-                         dateRange === 'year' ? 12 : 1;
-      
-      // Add some randomness to make it feel real
-      const randomFactor = 0.9 + Math.random() * 0.2;
-
-      setStats({
-        revenue: { value: Math.floor(124500 * multiplier * randomFactor), label: 'Total Revenue', trend: multiplier > 1 ? '+125.5%' : '+12.5%' },
-        orders: { value: Math.floor(452 * multiplier * randomFactor), label: 'Total Orders', trend: multiplier > 1 ? '+45.2%' : '+5.2%' },
-        visitors: { value: Math.floor(14205 * multiplier * randomFactor), label: 'Unique Visitors', trend: '-2.4%' },
-        avgOrder: { value: Math.floor(1850 * (1 + Math.random() * 0.1)), label: 'Avg. Order Value', trend: '+8.1%' }
-      });
-      setIsLoading(false);
-    }, 400);
+    // Fix: setState in effect - wrap in double timeout to be safe or just one
+    const timer = setTimeout(() => {
+        setIsLoading(true);
+        // Simulate API call
+        setTimeout(() => {
+          // Randomize data slightly to show "change"
+          const multiplier = dateRange === 'today' ? 0.05 : 
+                             dateRange === 'yesterday' ? 0.08 : 
+                             dateRange === '7d' ? 0.25 : 
+                             dateRange === '30d' ? 1 : 
+                             dateRange === 'year' ? 12 : 1;
+          
+          // Add some randomness to make it feel real
+          const randomFactor = 0.9 + Math.random() * 0.2;
+    
+          setStats({
+            revenue: { value: Math.floor(124500 * multiplier * randomFactor), label: 'Total Revenue', trend: multiplier > 1 ? '+125.5%' : '+12.5%' },
+            orders: { value: Math.floor(452 * multiplier * randomFactor), label: 'Total Orders', trend: multiplier > 1 ? '+45.2%' : '+5.2%' },
+            visitors: { value: Math.floor(14205 * multiplier * randomFactor), label: 'Unique Visitors', trend: '-2.4%' },
+            avgOrder: { value: Math.floor(1850 * (1 + Math.random() * 0.1)), label: 'Avg. Order Value', trend: '+8.1%' }
+          });
+          setIsLoading(false);
+        }, 400);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [dateRange]);
 
   const recentOrders = [
@@ -148,7 +152,7 @@ export default function AdminDashboard() {
       <div className="page-header">
         <div>
            <h1 className="page-title">Dashboard Overview</h1>
-           <p className="subtitle">Welcome back, {user?.name || 'Admin'}. Here's what's happening today.</p>
+           <p className="subtitle">Welcome back, {user?.name || 'Admin'}. Here&apos;s what&apos;s happening today.</p>
         </div>
         <div className="controls">
           <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className="date-select">

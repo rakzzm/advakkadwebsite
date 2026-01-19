@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 
 export default function ContactUs() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

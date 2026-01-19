@@ -16,7 +16,7 @@ export default function Navbar() {
           {/* Logo path relative to public/ folder */}
           <Image 
             src="/logo/logo.jpg" 
-            alt="Advakkad Logo" 
+            alt="Adavakkad Logo"  
             width={120} 
             height={70} 
             priority

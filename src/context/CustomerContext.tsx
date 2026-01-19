@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export type Customer = {
   id: number;
@@ -48,25 +49,8 @@ const INITIAL_SEGMENTS: Segment[] = [
 ];
 
 export function CustomerProvider({ children }: { children: ReactNode }) {
-  const [customers, setCustomers] = useState<Customer[]>(INITIAL_CUSTOMERS);
-  const [segments, setSegments] = useState<Segment[]>(INITIAL_SEGMENTS);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    const savedCustomers = localStorage.getItem('advakkad_customers');
-    const savedSegments = localStorage.getItem('advakkad_segments');
-    if (savedCustomers) setCustomers(JSON.parse(savedCustomers));
-    if (savedSegments) setSegments(JSON.parse(savedSegments));
-  }, []);
-
-  // Save to localStorage on change
-  useEffect(() => {
-    localStorage.setItem('advakkad_customers', JSON.stringify(customers));
-  }, [customers]);
-
-  useEffect(() => {
-    localStorage.setItem('advakkad_segments', JSON.stringify(segments));
-  }, [segments]);
+  const [customers, setCustomers] = useLocalStorage<Customer[]>('advakkad_customers', INITIAL_CUSTOMERS);
+  const [segments, setSegments] = useLocalStorage<Segment[]>('advakkad_segments', INITIAL_SEGMENTS);
 
   const addCustomer = (customerData: Omit<Customer, 'id' | 'orders' | 'spent' | 'joinDate' | 'status'>) => {
     const newCustomer: Customer = {

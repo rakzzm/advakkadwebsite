@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export type Message = {
   id: string;
@@ -59,31 +60,8 @@ const INITIAL_CHATS: Chat[] = [
 ];
 
 export function ChatProvider({ children }: { children: ReactNode }) {
-  const [chats, setChats] = useState<Chat[]>(INITIAL_CHATS);
+  const [chats, setChats] = useLocalStorage<Chat[]>('advakkad_chats', INITIAL_CHATS);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
-
-  // Load from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('advakkad_chats');
-    if (saved) {
-      setChats(JSON.parse(saved));
-    }
-
-    // Listen for storage events (updates from other tabs/frontend)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'advakkad_chats' && e.newValue) {
-        setChats(JSON.parse(e.newValue));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  // Save to localStorage
-  useEffect(() => {
-    localStorage.setItem('advakkad_chats', JSON.stringify(chats));
-  }, [chats]);
 
   const sendMessage = (chatId: string, text: string) => {
     const newMessage: Message = {

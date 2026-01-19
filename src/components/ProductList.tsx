@@ -81,7 +81,7 @@ export default function ProductList() {
               <option value="all">All Products</option>
               <option value="kids">Kids Wear</option>
               <option value="women">Women Wear</option>
-              <option value="mens">Men's Wear</option>
+              <option value="mens">Men&apos;s Wear</option>
               <option value="traditional">Traditional Wear</option>
               <option value="silk-sarees">Silk Sarees</option>
               <option value="wedding">Wedding Collection</option>
@@ -174,7 +174,7 @@ export default function ProductList() {
 
       {!filteredProducts.length && (
         <div id="noResults" className="no-results" style={{ display: 'block' }}>
-          <p>No products found matching your criteria.</p>
+          <p>No products found in this category. We&apos;re updating our stock!</p>
         </div>
       )}
     </>

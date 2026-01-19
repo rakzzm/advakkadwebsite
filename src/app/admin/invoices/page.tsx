@@ -86,7 +86,7 @@ export default function AdminInvoices() {
         <body>
           <div class="header">
             <div class="company">
-              <h1>Advakkad Collections</h1>
+              <h1>Adavakkad Collections</h1>
               <p>Wedding Center<br>Kerala, India</p>
             </div>
             <div class="meta">
@@ -124,7 +124,7 @@ export default function AdminInvoices() {
 
           <div class="footer">
             <p>Thank you for your business!</p>
-            <p>For questions, contact support@advakkad.com</p>
+            <p>For questions, contact support@adavakkad.com</p>
           </div>
           <script>
             window.onload = function() { window.print(); }
@@ -220,7 +220,7 @@ export default function AdminInvoices() {
                 </div>
                 <div className="form-group">
                   <label>Status</label>
-                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as any})}>
+                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as 'Paid' | 'Pending' | 'Overdue'})}>
                     <option value="Paid">Paid</option>
                     <option value="Pending">Pending</option>
                     <option value="Overdue">Overdue</option>

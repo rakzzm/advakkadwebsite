@@ -16,7 +16,7 @@ export default function AdminProfile() {
           <div className="avatar-large">A</div>
           <h2>{user?.name || 'Admin User'}</h2>
           <p className="role">Administrator</p>
-          <p className="email">{user?.email || 'admin@advakkad.com'}</p>
+          <p className="email">{user?.email || 'admin@adavakkad.com'}</p>
         </div>
 
         <div className="profile-card form-card">

@@ -12,7 +12,7 @@ type User = {
 };
 
 const INITIAL_USERS: User[] = [
-  { id: 1, name: 'Admin User', email: 'admin@advakkad.com', role: 'Admin', status: 'Active', joined: '2024-01-01' },
+  { id: 1, name: 'Admin User', email: 'admin@adavakkad.com', role: 'Admin', status: 'Active', joined: '2024-01-01' },
   { id: 2, name: 'Rahul Krishna', email: 'rahul@example.com', role: 'Customer', status: 'Active', joined: '2026-01-10' },
   { id: 3, name: 'Sarah Jones', email: 'sarah@example.com', role: 'Customer', status: 'Inactive', joined: '2026-01-12' },
 ];
@@ -25,7 +25,13 @@ export default function AdminUsers() {
 
   useEffect(() => {
     const saved = localStorage.getItem('advakkad_users');
-    if (saved) setUsers(JSON.parse(saved));
+    if (saved) {
+        // Fix: Avoid synchronous setState in effect
+        const timer = setTimeout(() => {
+            setUsers(JSON.parse(saved));
+        }, 0);
+        return () => clearTimeout(timer);
+    }
   }, []);
 
   useEffect(() => {
@@ -121,14 +127,14 @@ export default function AdminUsers() {
               <div className="form-row">
                 <div className="form-group">
                   <label>Role</label>
-                  <select value={formData.role} onChange={e => setFormData({...formData, role: e.target.value as any})}>
+                  <select value={formData.role} onChange={e => setFormData({...formData, role: e.target.value as User['role']})}>
                     <option value="Customer">Customer</option>
                     <option value="Admin">Admin</option>
                   </select>
                 </div>
                 <div className="form-group">
                   <label>Status</label>
-                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as any})}>
+                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as User['status']})}>
                     <option value="Active">Active</option>
                     <option value="Inactive">Inactive</option>
                   </select>

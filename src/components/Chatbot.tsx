@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 // Types shared with Admin Chat
 type AdminMessage = {
@@ -58,67 +60,58 @@ export default function Chatbot() {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [sessionId, setSessionId] = useState<string>('');
+  
+  // Use useLocalStorage for persistence
+  const [sessionId, setSessionId] = useLocalStorage<string>('chat_session_id', '');
+  const [chats, setChats] = useLocalStorage<ChatSession[]>('advakkad_chats', []);
+
+  // Derived state for status
   const [sessionStatus, setSessionStatus] = useState<ChatStatus>('bot');
   
   const chatBoxRef = useRef<HTMLUListElement>(null);
 
-  // Initialize Session
+  // Initialize Session ID if missing
   useEffect(() => {
-    let storedSession = localStorage.getItem('chat_session_id');
-    if (!storedSession) {
-      storedSession = 'guest_' + Date.now();
-      localStorage.setItem('chat_session_id', storedSession);
+    // Only generate if we don't have one
+    if (!sessionId) {
+       const existing = localStorage.getItem('chat_session_id');
+       if (!existing) {
+         setSessionId('guest_' + Date.now());
+       }
     }
-    setSessionId(storedSession);
+  }, [sessionId, setSessionId]);
 
-    // Initial Load of previous messages if any
-    const allChats: ChatSession[] = JSON.parse(localStorage.getItem('advakkad_chats') || '[]');
-    const myChat = allChats.find(c => c.id === storedSession);
-    
+  // Sync messages from chats when chats or sessionId changes
+  useEffect(() => {
+    if (!sessionId || !chats.length) return;
+
+    const myChat = chats.find(c => c.id === sessionId);
     if (myChat) {
-      setSessionStatus(myChat.status || 'bot'); // Load status
-      // Convert Admin format to Local format
+      // Avoid synchronous setState if possible, or accept it as it's a response to prop/storage change
+      // But let's wrap in check to avoid unnecessary updates
+      if (myChat.status && myChat.status !== sessionStatus) {
+         const timer = setTimeout(() => {
+             setSessionStatus(myChat.status);
+         }, 0);
+         return () => clearTimeout(timer);
+      }
+      
       const converted: LocalMessage[] = myChat.messages.map(m => ({
         text: m.text,
         sender: m.sender === 'admin' ? 'incoming' : 'outgoing'
       }));
-      if (converted.length > 0) setMessages(converted);
-    } else {
-      // Create new session in DB
-      const newChat: ChatSession = {
-        id: storedSession,
-        customerName: 'Guest User ' + storedSession.slice(-4),
-        lastMessage: 'Started conversation',
-        unreadCount: 0,
-        lastActive: 'Just now',
-        status: 'bot', // Init status
-        messages: []
-      };
-      localStorage.setItem('advakkad_chats', JSON.stringify([...allChats, newChat]));
-      setSessionStatus('bot');
-    }
-  }, []);
 
-  // Sync Listener (Admin replies)
-  useEffect(() => {
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'advakkad_chats' && e.newValue && sessionId) {
-        const allChats: ChatSession[] = JSON.parse(e.newValue);
-        const myChat = allChats.find(c => c.id === sessionId);
-        if (myChat) {
-           const converted: LocalMessage[] = myChat.messages.map(m => ({
-            text: m.text,
-            sender: m.sender === 'admin' ? 'incoming' : 'outgoing'
-          }));
-          setMessages(converted);
-          setSessionStatus(myChat.status || 'bot'); // Update status from admin
-        }
-      }
-    };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
-  }, [sessionId]);
+      const timer = setTimeout(() => {
+          setMessages(prev => {
+              if (prev.length !== converted.length || (prev.length > 0 && converted.length > 0 && prev[prev.length-1].text !== converted[converted.length-1].text)) {
+                  return converted.length > 0 ? converted : prev;
+              }
+              return prev;
+          });
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [chats, sessionId, sessionStatus]);
 
   // Auto-scroll
   useEffect(() => {
@@ -131,31 +124,45 @@ export default function Chatbot() {
 
   // Helper to sync to localStorage
   const syncToStorage = (text: string, sender: 'user' | 'admin', newStatus?: ChatStatus) => {
+    // We update 'chats' directly via setChats, which updates LS and triggers other tabs.
     if (!sessionId) return;
     
-    const allChats: ChatSession[] = JSON.parse(localStorage.getItem('advakkad_chats') || '[]');
-    const chatIndex = allChats.findIndex(c => c.id === sessionId);
+    // Find if chat exists
+    const chatIndex = chats.findIndex(c => c.id === sessionId);
     
     const newMessage: AdminMessage = {
       id: Date.now().toString(),
       sender: sender,
       text: text,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      read: sender === 'admin' // User messages are unread for admin
+      read: sender === 'admin'
     };
 
+    let newChats = [...chats];
+    
     if (chatIndex >= 0) {
-      allChats[chatIndex].messages.push(newMessage);
-      allChats[chatIndex].lastMessage = text;
-      allChats[chatIndex].lastActive = 'Just now';
-      if (newStatus) allChats[chatIndex].status = newStatus; // Update status
-      if (sender === 'user') allChats[chatIndex].unreadCount += 1;
-      
-      localStorage.setItem('advakkad_chats', JSON.stringify(allChats));
-      
-      // Force storage event for same-tab sync (if admin is open in iframe or parallel component)
-      window.dispatchEvent(new StorageEvent('storage', { key: 'advakkad_chats', newValue: JSON.stringify(allChats) }));
+      newChats[chatIndex] = {
+          ...newChats[chatIndex],
+          messages: [...newChats[chatIndex].messages, newMessage],
+          lastMessage: text,
+          lastActive: 'Just now',
+          unreadCount: sender === 'user' ? newChats[chatIndex].unreadCount + 1 : newChats[chatIndex].unreadCount,
+          status: newStatus || newChats[chatIndex].status
+      };
+    } else {
+        // Create new
+        const newChat: ChatSession = {
+            id: sessionId,
+            customerName: 'Guest User ' + sessionId.slice(-4),
+            lastMessage: text,
+            unreadCount: sender === 'user' ? 1 : 0,
+            lastActive: 'Just now',
+            status: newStatus || 'bot',
+            messages: [newMessage]
+        };
+        newChats = [...newChats, newChat];
     }
+    setChats(newChats);
   };
 
   // Bot Logic
@@ -188,11 +195,9 @@ export default function Chatbot() {
     const text = inputValue.trim();
     if (!text) return;
 
-    // 1. Update UI & Sync User Message
-    setMessages(prev => [...prev, { text, sender: 'outgoing' }]);
+    // 1. Update UI
     setInputValue("");
     
-    // If we are already in 'human' mode, simply send the message and DO NOT trigger bot response
     if (sessionStatus === 'human') {
         syncToStorage(text, 'user');
         return;
@@ -208,15 +213,13 @@ export default function Chatbot() {
           setSessionStatus('human');
           setIsTyping(true);
           setTimeout(() => {
-            setMessages(prev => [...prev, { text: response.text, sender: 'incoming' }]);
-            syncToStorage(response.text, 'admin', 'human'); // Sync with new status
+            syncToStorage(response.text, 'admin', 'human');
             setIsTyping(false);
           }, 800);
       } else {
           // Normal Bot Reply
           setIsTyping(true);
           setTimeout(() => {
-            setMessages(prev => [...prev, { text: response.text, sender: 'incoming' }]);
             syncToStorage(response.text, 'admin'); 
             setIsTyping(false);
           }, 600);
@@ -234,8 +237,15 @@ export default function Chatbot() {
   return (
     <>
       <button className="chatbot-toggler" onClick={toggleChat}>
-        <span className="material-symbols-outlined" style={{ opacity: isOpen ? 0 : 1 }}>chat_bubble</span>
-        <span className="material-symbols-outlined" style={{ opacity: isOpen ? 1 : 0 }}>close</span>
+        <div style={{ position: 'relative', width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', opacity: isOpen ? 0 : 1, transition: 'opacity 0.3s ease' }}>
+            <Image 
+                src="/bot-avatar.png" 
+                alt="Chat" 
+                fill
+                style={{ objectFit: 'cover' }}
+            />
+        </div>
+        <span className="material-symbols-outlined" style={{ opacity: isOpen ? 1 : 0, position: 'absolute' }}>close</span>
       </button>
 
       <div className={`chatbot ${isOpen ? 'show-chatbot' : ''}`}>
@@ -246,13 +256,19 @@ export default function Chatbot() {
         <ul className="chatbox" ref={chatBoxRef}>
           {messages.map((msg, i) => (
             <li key={i} className={`chat ${msg.sender}`}>
-              {msg.sender === 'incoming' && <span className="material-symbols-outlined">smart_toy</span>}
+              {msg.sender === 'incoming' && (
+                <div className="bot-avatar" style={{ position: 'relative', width: '32px', height: '32px' }}>
+                    <Image src="/bot-avatar.png" alt="Bot" fill style={{ borderRadius: '50%', objectFit: 'cover' }} />
+                </div>
+              )}
               <p>{msg.text}</p>
             </li>
           ))}
           {isTyping && (
              <li className="chat incoming">
-               <span className="material-symbols-outlined">smart_toy</span>
+               <div className="bot-avatar" style={{ position: 'relative', width: '32px', height: '32px' }}>
+                  <Image src="/bot-avatar.png" alt="Bot" fill style={{ borderRadius: '50%', objectFit: 'cover' }} />
+               </div>
                <p>Thinking...</p>
              </li>
           )}

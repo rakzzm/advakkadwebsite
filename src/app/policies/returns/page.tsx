@@ -41,7 +41,7 @@ export default function ReturnsPage() {
             <ul>
               <li>Innerwear and Lingerie</li>
               <li>Customized or Altered Items</li>
-              <li>Items sold during "Final Sale" or clearance events</li>
+              <li>Items sold during &quot;Final Sale&quot; or clearance events</li>
             </ul>
 
             <div className="contact-box">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useProducts, Product } from '@/context/ProductContext';
+import { useProducts } from '@/context/ProductContext';
 
 export default function AdminInventory() {
   const { products, updateStock } = useProducts();

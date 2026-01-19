@@ -210,7 +210,7 @@ export default function Home() {
                     <div style={{ color: '#f59e0b', fontSize: '1.5rem' }}>💎</div>
                     <div>
                       <h4 style={{ margin: '0 0 0.5rem 0' }}>Affordable Luxury</h4>
-                      <p style={{ margin: 0 }}>We believe great style shouldn't come with a heavy price tag.</p>
+                      <p style={{ margin: 0 }}>We believe great style shouldn&apos;t come with a heavy price tag.</p>
                     </div>
                   </div>
                 </div>
