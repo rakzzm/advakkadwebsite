@@ -74,6 +74,33 @@ export default function Home() {
             }}>
               Thrikkadeeri
             </h3>
+            
+            {/* Shop Front Image */}
+            <div style={{ 
+              marginTop: '1.5rem', 
+              width: '100%', 
+              display: 'flex', 
+              justifyContent: 'center' 
+            }}>
+              <div style={{ 
+                position: 'relative', 
+                width: '100%', 
+                maxWidth: '900px', 
+                height: '500px',
+                borderRadius: '12px', 
+                overflow: 'hidden',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+              }}>
+                <Image
+                  src="/Homepage/Shop_Front_View.png"
+                  alt="Adavakkad Collections Shop Thrikkadeeri"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 900px"
+                  priority
+                />
+              </div>
+            </div>
           </div>
 
           {/* Trust Badges - Restored SVGs */}
