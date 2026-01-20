@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent } from 'react';
+import Link from 'next/link';
 
 export default function ContactUs() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -8,6 +9,11 @@ export default function ContactUs() {
     alert('Thank you for your message! We will get back to you soon.');
     e.currentTarget.reset();
   };
+// ... (rest of the file until line 151)
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link href="/products" className="btn-secondary">View Products</Link>
+          <Link href="/gallery" className="btn-secondary">View Gallery</Link>
+        </div>
 
   return (
     <>
@@ -42,6 +48,9 @@ export default function ContactUs() {
             <p style={{ color: 'var(--text-secondary)' }}>
               <a href="tel:+919847672978" style={{ color: 'var(--color-primary)', textDecoration: 'none' }}>
                 +91 98476 72978
+              </a><br />
+              <a href="tel:04662380011" style={{ color: 'var(--color-primary)', textDecoration: 'none' }}>
+                0466 238 0011
               </a>
             </p>
           </div>
@@ -51,6 +60,9 @@ export default function ContactUs() {
             <p style={{ color: 'var(--text-secondary)' }}>
               <a href="mailto:info@adavakkad.com" style={{ color: 'var(--color-primary)', textDecoration: 'none' }}>
                 info@adavakkad.com
+              </a><br />
+              <a href="mailto:adavakkadcollections112@gmail.com" style={{ color: 'var(--color-primary)', textDecoration: 'none' }}>
+                adavakkadcollections112@gmail.com
               </a>
             </p>
           </div>
@@ -149,8 +161,8 @@ export default function ContactUs() {
           to help you find the perfect outfit for any occasion. We look forward to serving you!
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="/products" className="btn-secondary">View Products</a>
-          <a href="/gallery" className="btn-secondary">View Gallery</a>
+          <Link href="/products" className="btn-secondary">View Products</Link>
+          <Link href="/gallery" className="btn-secondary">View Gallery</Link>
         </div>
       </div>
     </>

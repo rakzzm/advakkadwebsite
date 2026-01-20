@@ -208,6 +208,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           min-height: 100vh;
           background-color: #f8fafc;
           font-family: var(--font-outfit), sans-serif;
+          position: relative;
+          z-index: 1;
         }
 
         /* Sidebar Styles */

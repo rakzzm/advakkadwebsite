@@ -5,15 +5,16 @@ import Image from 'next/image';
 
 // Gallery data
 const galleryImages = [
-  { src: '/Gallery/Fabric_Collections.png', title: 'Fabric Collections', description: 'Extensive Range of Sarees', category: 'store', type: 'normal' },
-  { src: '/Gallery/Store_Interior.png', title: 'Store Interior', description: 'Premium Shopping Experience', category: 'store', type: 'normal' },
-  { src: '/Gallery/Store_View.png', title: 'Store View', description: 'Wide Collection Display', category: 'store', type: 'tall' },
-  { src: '/Gallery/Shopping_Area.png', title: 'Shopping Area', description: 'Comfortable Browsing Space', category: 'store', type: 'normal' },
-  { src: '/Gallery/Saree_Collection.png', title: 'Saree Collection', description: 'Traditional & Designer', category: 'collections', type: 'normal' },
-  { src: '/Gallery/Traditional_Wear.png', title: 'Traditional Wear', description: 'Kerala Kasavu Saree', category: 'wedding', type: 'tall' },
-  { src: '/Gallery/Wedding_Collection.png', title: 'Wedding Collection', description: 'Bridal Special', category: 'wedding', type: 'wide' },
-  { src: '/Gallery/Festival_Special.png', title: 'Festival Special', description: 'Vibrant Colors', category: 'collections', type: 'normal' },
-  { src: '/Gallery/Traditional_Elegance.png', title: 'Traditional Elegance', description: 'Bridal Collection', category: 'wedding', type: 'normal' }
+  { src: '/Gallery/Gallery_Update_1.jpg', title: 'Adavakkad Collections', description: 'Store Exterior View', category: 'store', type: 'tall' },
+  { src: '/Gallery/Gallery_Update_2.jpg', title: 'Interior Display', description: 'Showcasing Collections', category: 'store', type: 'tall' },
+  { src: '/Gallery/Gallery_Update_3.png', title: 'Mannequin Display', description: 'Latest Trends', category: 'store', type: 'wide' },
+  { src: '/Gallery/Gallery_Update_4.jpg', title: 'Diverse Collection', description: 'Fabrics & Designs', category: 'collections', type: 'tall' },
+  { src: '/Gallery/Gallery_Update_5.jpg', title: 'Elegant Patterns', description: 'Exclusive Range', category: 'collections', type: 'tall' },
+  { src: '/Gallery/Gallery_Update_6.png', title: 'New Arrival', description: 'Latest Collection', category: 'collections', type: 'normal' },
+  { src: '/Gallery/Gallery_Update_7.png', title: 'Store Ambiance', description: 'Interior View', category: 'store', type: 'normal' },
+  { src: '/Gallery/Gallery_Update_8.png', title: 'Exclusive Design', description: 'Premium Wear', category: 'collections', type: 'wide' },
+  { src: '/Gallery/Gallery_Update_9.png', title: 'Fashion Trends', description: 'Modern Styles', category: 'collections', type: 'tall' },
+  { src: '/Gallery/Gallery_Update_10.png', title: 'Collection Highlight', description: 'Featured Item', category: 'collections', type: 'normal' }
 ];
 
 export default function GalleryGrid() {

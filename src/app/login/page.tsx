@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
@@ -9,28 +10,33 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const router = useRouter(); // Initialized useRouter
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     // Mock Authentication Logic
-    if (email === 'admin@advakkad.com' && password === 'admin123') {
+    if (email === 'abhilash@adavakkad.com' && password === 'admin123') {
       login({
         id: '1',
-        name: 'Admin User',
-        email: email,
+        name: 'Abhilash',
+        email: 'abhilash@adavakkad.com',
         role: 'admin'
       });
+      // Set simple cookie/local storage auth
+      localStorage.setItem('isAdmin', 'true');
+      document.cookie = "isAdmin=true; path=/";
+      router.push('/admin/dashboard');
     } else if (email === 'user@example.com' && password === 'user123') {
       login({
         id: '2',
-        name: 'John Doe',
+        name: 'Demo User',
         email: email,
         role: 'customer'
       });
     } else {
-      setError('Invalid email or password. Try (admin@advakkad.com / admin123)');
+      setError('Invalid email or password.');
     }
   };
 

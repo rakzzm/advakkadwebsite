@@ -13,7 +13,9 @@ export default function Footer() {
               Thrikkadeeri, Kerala<br />
               India, 679502<br />
               Phone: +91 98476 72978<br />
-              General: info@adavakkad.com
+              Landline: 0466 238 0011<br />
+              General: info@adavakkad.com<br />
+              Support: adavakkadcollections112@gmail.com
             </p>
           </div>
 
@@ -21,7 +23,7 @@ export default function Footer() {
             <h4>Quick Links</h4>
             <ul className="footer-links">
               <li><Link href="/">Home</Link></li>
-              <li><Link href="/about">About</Link></li>
+
               <li><Link href="/products">Products</Link></li>
               <li><Link href="/contact">Contact</Link></li>
             </ul>
@@ -34,6 +36,7 @@ export default function Footer() {
               <li><Link href="/policies/refund-policy">Refund Policy</Link></li>
               <li><Link href="/policies/returns">Returns & Exchanges</Link></li>
               <li><Link href="/policies/terms">Terms & Conditions</Link></li>
+              <li><Link href="/policies/shipping-policy">Shipping Policy</Link></li>
               <li><Link href="/faq">FAQ</Link></li>
             </ul>
         </div>

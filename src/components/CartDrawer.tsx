@@ -1,16 +1,37 @@
 'use client';
 
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CartDrawer() {
   const { items, isOpen, closeCart, removeFromCart, updateQuantity, total } = useCart();
+  const pathname = usePathname();
+
+  // Close cart on route change
+  useEffect(() => {
+    closeCart();
+  }, [pathname, closeCart]);
+
+  // Lock body scroll when cart is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <>
+    <div style={{ position: 'relative', zIndex: 2000 }}>
+      {/* Backdrop */}
       <div 
         onClick={closeCart}
         style={{
@@ -20,10 +41,13 @@ export default function CartDrawer() {
           right: 0,
           bottom: 0,
           background: 'rgba(0,0,0,0.5)',
-          zIndex: 1999,
-          backdropFilter: 'blur(4px)'
+          backdropFilter: 'blur(4px)',
+          cursor: 'pointer'
         }}
+        aria-hidden="true"
       />
+      
+      {/* Drawer */}
       <div 
         style={{
           position: 'fixed',
@@ -33,7 +57,6 @@ export default function CartDrawer() {
           width: '100%',
           maxWidth: '400px',
           background: 'white',
-          zIndex: 2000,
           boxShadow: '-4px 0 20px rgba(0,0,0,0.1)',
           display: 'flex',
           flexDirection: 'column',
@@ -118,7 +141,7 @@ export default function CartDrawer() {
                    </div>
                    
                    <button
-                     onClick={() => removeFromCart(item.id, item.size, item.age)}
+                     onClick={() => removeFromCart(item.id, item.size, item.age, item.color)}
                      style={{
                        background: 'none',
                        border: 'none',
@@ -172,6 +195,6 @@ export default function CartDrawer() {
           to { transform: translateX(0); }
         }
       `}</style>
-    </>
+    </div>
   );
 }

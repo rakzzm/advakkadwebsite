@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback, useMemo } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 export interface CartItem {
@@ -11,6 +11,7 @@ export interface CartItem {
   quantity: number;
   size?: string;
   age?: string;
+  color?: string;
   variant?: string; // For bundle variants if any
 }
 
@@ -22,8 +23,8 @@ interface CartContextType {
   openCart: () => void;
   closeCart: () => void;
   addToCart: (item: Omit<CartItem, 'quantity'>) => void;
-  removeFromCart: (id: number | string, size?: string, age?: string) => void;
-  updateQuantity: (id: number | string, delta: number, size?: string, age?: string) => void;
+  removeFromCart: (id: number | string, size?: string, age?: string, color?: string) => void;
+  updateQuantity: (id: number | string, delta: number, size?: string, age?: string, color?: string) => void;
   clearCart: () => void;
 }
 
@@ -33,16 +34,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useLocalStorage<CartItem[]>('advakkad-cart', []);
   const [isOpen, setIsOpen] = useState(false);
 
-  const openCart = () => setIsOpen(true);
-  const closeCart = () => setIsOpen(false);
+  const openCart = useCallback(() => setIsOpen(true), []);
+  const closeCart = useCallback(() => setIsOpen(false), []);
 
-  const addToCart = (newItem: Omit<CartItem, 'quantity'>) => {
+  const addToCart = useCallback((newItem: Omit<CartItem, 'quantity'>) => {
     setItems((prevItems) => {
       const existingItemIndex = prevItems.findIndex(
         (item) => 
           item.id === newItem.id && 
           item.size === newItem.size && 
-          item.age === newItem.age
+          item.age === newItem.age &&
+          item.color === newItem.color
       );
 
       if (existingItemIndex > -1) {
@@ -54,48 +56,48 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
     });
     setIsOpen(true);
-  };
+  }, [setItems]);
 
-  const removeFromCart = (id: number | string, size?: string, age?: string) => {
+  const removeFromCart = useCallback((id: number | string, size?: string, age?: string, color?: string) => {
     setItems((prevItems) => 
-      prevItems.filter((item) => !(item.id === id && item.size === size && item.age === age))
+      prevItems.filter((item) => !(item.id === id && item.size === size && item.age === age && item.color === color))
     );
-  };
+  }, [setItems]);
 
-  const updateQuantity = (id: number | string, delta: number, size?: string, age?: string) => {
+  const updateQuantity = useCallback((id: number | string, delta: number, size?: string, age?: string, color?: string) => {
     setItems((prevItems) => 
       prevItems.map((item) => {
-        if (item.id === id && item.size === size && item.age === age) {
+        if (item.id === id && item.size === size && item.age === age && item.color === color) {
           const newQuantity = Math.max(1, item.quantity + delta);
           return { ...item, quantity: newQuantity };
         }
         return item;
       })
     );
-  };
+  }, [setItems]);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setItems([]);
-  };
+  }, [setItems]);
 
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  const value = useMemo(() => ({
+    items, 
+    isOpen, 
+    total, 
+    cartCount,
+    openCart, 
+    closeCart, 
+    addToCart, 
+    removeFromCart, 
+    updateQuantity,
+    clearCart 
+  }), [items, isOpen, total, cartCount, openCart, closeCart, addToCart, removeFromCart, updateQuantity, clearCart]);
+
   return (
-    <CartContext.Provider 
-      value={{ 
-        items, 
-        isOpen, 
-        total, 
-        cartCount,
-        openCart, 
-        closeCart, 
-        addToCart, 
-        removeFromCart, 
-        updateQuantity,
-        clearCart 
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

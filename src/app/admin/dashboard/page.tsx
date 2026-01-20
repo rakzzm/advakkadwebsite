@@ -17,31 +17,14 @@ export default function AdminDashboard() {
     avgOrder: { value: 1850, label: 'Avg. Order Value', trend: '+8.1%' }
   });
 
-  // Simulating data fetch based on date filter
+  // Simulating data fetch based on date filter (Non-blocking)
   useEffect(() => {
-    // Fix: setState in effect - wrap in double timeout to be safe or just one
     const timer = setTimeout(() => {
-        setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-          // Randomize data slightly to show "change"
-          const multiplier = dateRange === 'today' ? 0.05 : 
-                             dateRange === 'yesterday' ? 0.08 : 
-                             dateRange === '7d' ? 0.25 : 
-                             dateRange === '30d' ? 1 : 
-                             dateRange === 'year' ? 12 : 1;
-          
-          // Add some randomness to make it feel real
-          const randomFactor = 0.9 + Math.random() * 0.2;
-    
-          setStats({
-            revenue: { value: Math.floor(124500 * multiplier * randomFactor), label: 'Total Revenue', trend: multiplier > 1 ? '+125.5%' : '+12.5%' },
-            orders: { value: Math.floor(452 * multiplier * randomFactor), label: 'Total Orders', trend: multiplier > 1 ? '+45.2%' : '+5.2%' },
-            visitors: { value: Math.floor(14205 * multiplier * randomFactor), label: 'Unique Visitors', trend: '-2.4%' },
-            avgOrder: { value: Math.floor(1850 * (1 + Math.random() * 0.1)), label: 'Avg. Order Value', trend: '+8.1%' }
-          });
-          setIsLoading(false);
-        }, 400);
+      // Just mock date change logic without UI blocking
+      setStats(prev => ({
+        ...prev,
+        revenue: { ...prev.revenue, value: Math.floor(124500 * (0.9 + Math.random() * 0.2)) },
+      }));
     }, 0);
     return () => clearTimeout(timer);
   }, [dateRange]);

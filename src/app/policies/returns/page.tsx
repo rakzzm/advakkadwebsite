@@ -1,14 +1,11 @@
 'use client';
 
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+
 
 export default function ReturnsPage() {
   return (
-    <>
-      <Navbar />
-      <div className="policy-page">
-        <header className="page-hero">
+    <div className="policy-page">
+      <header className="page-hero">
           <div className="container">
             <h1>Returns & Exchanges</h1>
             <p>Our commitment to your satisfaction.</p>
@@ -53,9 +50,6 @@ export default function ReturnsPage() {
             </div>
           </div>
         </section>
-      </div>
-      <Footer />
-
       <style jsx>{`
         .policy-page { min-height: 80vh; background: #fff; padding-bottom: 4rem; }
         .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
@@ -77,6 +71,6 @@ export default function ReturnsPage() {
         .contact-box h4 { margin: 0; font-size: 1.1rem; color: #1a1a1a; }
         .contact-box p { margin: 0; font-size: 0.9rem; }
       `}</style>
-    </>
+    </div>
   );
 }

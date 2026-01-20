@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
@@ -107,21 +108,27 @@ export default function ProductList() {
         {filteredProducts.map(product => (
           <div key={product.id} className="product-card" data-category={product.category}>
             <div className="product-image-placeholder">
-              {(product.image.startsWith('/') || product.image.startsWith('data:')) ? (
-                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                  <Image 
-                    src={product.image} 
-                    alt={product.name} 
-                    fill 
-                    style={{ objectFit: 'cover', objectPosition: 'top' }}
-                  />
-                </div>
-              ) : (
-                <span className="product-icon" style={{ fontSize: '4rem' }}>{product.image}</span>
-              )}
+              <Link href={`/products/${product.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+                {(product.image.startsWith('/') || product.image.startsWith('data:')) ? (
+                  <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                    <Image 
+                      src={product.image} 
+                      alt={product.name} 
+                      fill 
+                      style={{ objectFit: 'cover', objectPosition: 'top' }}
+                    />
+                  </div>
+                ) : (
+                  <span className="product-icon" style={{ fontSize: '4rem' }}>{product.image}</span>
+                )}
+              </Link>
             </div>
             <div className="product-info">
-              <h3 className="product-name">{product.name}</h3>
+              <h3 className="product-name">
+                <Link href={`/products/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {product.name}
+                </Link>
+              </h3>
               <p className="product-price">₹{product.price.toLocaleString('en-IN')}</p>
               
               <div className="product-details">

@@ -6,29 +6,29 @@ const offers = [
   {
     id: 1,
     title: "Mega Family Festival Bundle",
-    description: "Complete festival outfit set for a family of 4. Includes 1 Men's Mundu Set, 1 Women's Silk Saree, and 2 Kids' Party Wear outfits.",
-    originalPrice: 12999,
-    offerPrice: 9999,
-    discount: "23% OFF",
+    description: "Complete festival outfit set for a family.",
+    originalPrice: 3999,
+    offerPrice: 2999,
+    discount: "25% OFF",
     items: [
-      "1x Premium Men's Shirt & Mundu",
-      "1x Kanchipuram Art Silk Saree",
-      "2x Kids Festive Sets (Boy/Girl)"
+      "1x Men's Mundu Set",
+      "1x Art Silk Saree",
+      "2x Kids Outfit"
     ],
     category: "family",
-    image: "/products/placeholder.png" // Placeholder
+    image: "/products/placeholder.png"
   },
   {
     id: 2,
     title: "Premium Saree Trio",
-    description: "Elegant collection of 3 distinctive sarees for different occasions. Perfect for gifting or wardrobe refresh.",
-    originalPrice: 5999,
-    offerPrice: 3999,
-    discount: "33% OFF",
+    description: "Elegant collection of 3 distinctive sarees.",
+    originalPrice: 3499,
+    offerPrice: 2499,
+    discount: "28% OFF",
     items: [
-      "1x Banarasi Butta Saree",
-      "1x Cotton Silk Daily Wear",
-      "1x Georgette Party Wear"
+      "1x Banarasi Print",
+      "1x Daily Wear",
+      "1x Cotton Silk"
     ],
     category: "saree",
     image: "/products/placeholder.png"
@@ -36,13 +36,13 @@ const offers = [
   {
     id: 3,
     title: "Authentic Mundu Pack",
-    description: "The essential Kerala traditional wear pack for men. High quality cotton with golden kasavu border.",
-    originalPrice: 2499,
-    offerPrice: 1899,
-    discount: "24% OFF",
+    description: "Essential Kerala traditional wear for men.",
+    originalPrice: 1999,
+    offerPrice: 1499,
+    discount: "25% OFF",
     items: [
-      "2x Double Mundu with Kasavu",
-      "1x Single Daily Wear Mundu",
+      "2x Double Mundu",
+      "1x Single Mundu",
       "Matching Angavastram"
     ],
     category: "mundu",
@@ -51,14 +51,14 @@ const offers = [
   {
     id: 4,
     title: "Churidhar Materials Combo",
-    description: "Unstitched churidhar materials in trendy designs. Mix and match to create your perfect style.",
-    originalPrice: 3499,
-    offerPrice: 2499,
-    discount: "28% OFF",
+    description: "Trendy unstitched churidhar materials.",
+    originalPrice: 2499,
+    offerPrice: 1899,
+    discount: "24% OFF",
     items: [
-      "1x Cotton Print Set",
-      "1x Synthetic Party Wear",
-      "1x Embroidered Neck Design"
+      "1x Cotton Print",
+      "1x Synthetic",
+      "1x Embroidered"
     ],
     category: "churidhar",
     image: "/products/placeholder.png"
@@ -66,14 +66,13 @@ const offers = [
   {
     id: 5,
     title: "Kids' Smart Casuals",
-    description: "Comfortable and stylish daily wear combo for children. Durable fabrics and fun designs.",
-    originalPrice: 2999,
-    offerPrice: 1999,
-    discount: "33% OFF",
+    description: "Comfortable daily wear for children.",
+    originalPrice: 2199,
+    offerPrice: 1599,
+    discount: "27% OFF",
     items: [
-      "3x T-Shirts / Tops",
-      "2x Shorts / Skirts",
-      "1x Denim Jeans"
+      "3x Tops/T-Shirts",
+      "2x Bottoms",
     ],
     category: "kids",
     image: "/products/placeholder.png"
@@ -81,16 +80,165 @@ const offers = [
   {
     id: 6,
     title: "Wedding Guest Special",
-    description: "Look your best at any wedding with this curated set for couples.",
-    originalPrice: 6500,
-    offerPrice: 4999,
-    discount: "23% OFF",
+    description: "Curated set for couples.",
+    originalPrice: 3999,
+    offerPrice: 2999,
+    discount: "25% OFF",
     items: [
       "1x Designer Saree",
-      "1x Men's Silk Shirt & Mundu",
-      "Accessories Kit"
+      "1x Men's Set",
+      "Accessories"
     ],
     category: "wedding",
+    image: "/products/placeholder.png"
+  },
+  // New Festival Offers
+  {
+    id: 7,
+    title: "Thrissur Pooram Special",
+    description: "Vibrant colors for the festival of festivals.",
+    originalPrice: 1999,
+    offerPrice: 1499,
+    discount: "25% OFF",
+    items: [
+      "1x Festive Silk Saree",
+      "1x Traditional Mundu"
+    ],
+    category: "pooram",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 8,
+    title: "Vishu Kani Collection",
+    description: "Golden hues for a prosperous new year.",
+    originalPrice: 2499,
+    offerPrice: 1899,
+    discount: "24% OFF",
+    items: [
+      "1x Kasavu Saree",
+      "1x Golden Border Mundu",
+      "1x Kids Kasavu Set"
+    ],
+    category: "vishu",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 9,
+    title: "Ramzan Eid Edition",
+    description: "Elegant styles for the holy celebrations.",
+    originalPrice: 2999,
+    offerPrice: 2299,
+    discount: "23% OFF",
+    items: [
+      "1x Premium Salwar Suit",
+      "1x Men's Kurta Pyjama",
+      "1x Prayer Cap/Scarf"
+    ],
+    category: "ramzan",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 10,
+    title: "Bakrid Festive Pack",
+    description: "Celebrate with our premium selection.",
+    originalPrice: 3299,
+    offerPrice: 2499,
+    discount: "24% OFF",
+    items: [
+      "1x Embroidered Abaya/Suit",
+      "1x Men's Pathani Suit"
+    ],
+    category: "bakrid",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 11,
+    title: "Independence Day Tricolor",
+    description: "Wear your patriotism with pride.",
+    originalPrice: 1499,
+    offerPrice: 999,
+    discount: "33% OFF",
+    items: [
+      "1x Khadi Sari/Kurta",
+      "1x Tricolor Dupatta/Sash",
+      "1x Flag Badge"
+    ],
+    category: "independence",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 12,
+    title: "Onam Sadhya Special",
+    description: "The ultimate Kerala traditional attire.",
+    originalPrice: 2599,
+    offerPrice: 1999,
+    discount: "23% OFF",
+    items: [
+      "1x Set Mundu",
+      "1x Men's Jubba & Mundu",
+      "1x Onam Gift Box"
+    ],
+    category: "onam",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 13,
+    title: "Mahanavami Divine Set",
+    description: "Graceful attire for auspicious days.",
+    originalPrice: 2199,
+    offerPrice: 1699,
+    discount: "22% OFF",
+    items: [
+      "1x Silk Cotton Saree",
+      "1x Blouse Material",
+      "1x Pooja Accessories"
+    ],
+    category: "mahanavami",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 14,
+    title: "Vijayadasami Vidyarambham",
+    description: "New beginnings with traditional elegance.",
+    originalPrice: 1899,
+    offerPrice: 1399,
+    discount: "26% OFF",
+    items: [
+      "1x Kids Traditional Set",
+      "1x Kerala Saree",
+      "Writing Accessories"
+    ],
+    category: "vijayadasami",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 15,
+    title: "Deepavali Lights Combo",
+    description: "Sparkling outfits for the festival of lights.",
+    originalPrice: 3499,
+    offerPrice: 2699,
+    discount: "23% OFF",
+    items: [
+      "1x Designer Lehenga/Saree",
+      "1x Men's Silk Kurta",
+      "1x Kids Festive Wear"
+    ],
+    category: "deepavali",
+    image: "/products/placeholder.png"
+  },
+  {
+    id: 16,
+    title: "Christmas Joy Bundle",
+    description: "Red and white themes for the season.",
+    originalPrice: 2699,
+    offerPrice: 1999,
+    discount: "26% OFF",
+    items: [
+      "1x Party Gown/Dress",
+      "1x Men's Formal Shirt",
+      "1x Santa Hat/Accessory"
+    ],
+    category: "christmas",
     image: "/products/placeholder.png"
   }
 ];

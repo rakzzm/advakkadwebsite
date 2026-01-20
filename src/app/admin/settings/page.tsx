@@ -6,7 +6,7 @@ export default function AdminSettings() {
   const [activeTab, setActiveTab] = useState('general');
   const [formData, setFormData] = useState({
     siteName: 'Adavakkad Collections',
-    adminEmail: 'admin@adavakkad.com',
+    adminEmail: 'abhilash@adavakkad.com',
     currency: 'INR',
     metaTitle: 'Adavakkad Collections - Premium Wedding Center',
     metaDescription: 'Shop the best wedding collections and ethnic wear.',

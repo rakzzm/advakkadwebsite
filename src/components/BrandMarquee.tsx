@@ -11,7 +11,7 @@ const brands = [
   { name: "Popees", src: "/brands/popees.jpeg" },
   { name: "Ramraj", src: "/brands/ramraj_logo_155x@2x.jpeg" },
   { name: "Uathayam", src: "/brands/uathayam.jpeg" },
-  { name: "V-Star", src: "/brands/v-star.jpeg" },
+
   { name: "Vikas", src: "/brands/vikas.png" },
 ];
 
