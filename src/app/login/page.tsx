@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
@@ -80,7 +80,7 @@ export default function LoginPage() {
           </button>
 
           <div className="login-footer">
-            <p>Don&apos;t have an account? <Link href="/signup">Sign Up</Link></p>
+            <p style={{ color: '#888', fontSize: '0.85rem' }}>Admin Access Only</p>
           </div>
         </form>
       </div>

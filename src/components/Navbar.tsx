@@ -57,7 +57,7 @@ export default function Navbar() {
              </button>
           </li>
           <li><Link href="/offers" className="nav-link offers-btn" onClick={() => setIsMenuOpen(false)}>Offers</Link></li>
-          <li><Link href="/login" className="nav-link signin-btn" onClick={() => setIsMenuOpen(false)}>Sign In / Sign Up</Link></li>
+          <li><Link href="/login" className="nav-link signin-btn" onClick={() => setIsMenuOpen(false)}>Sign In</Link></li>
         </ul>
       </div>
 
