@@ -36,7 +36,7 @@ const INITIAL_PRODUCTS: Product[] = [
     name: "Banarasi Butta Saree", 
     category: "silk-sarees", 
     subcategory: "women", 
-    price: 499, 
+    price: 399, 
     image: "/Products/Banarasi_Butta_Saree_New.jpg", 
     images: ["/Products/Banarasi_Butta_Saree_New.jpg", "/Products/Banarasi_Butta_Saree_New.jpg", "/Products/Banarasi_Butta_Saree_New.jpg", "/Products/Banarasi_Butta_Saree_New.jpg"],
     sizes: ["Free Size"], 
@@ -50,7 +50,7 @@ const INITIAL_PRODUCTS: Product[] = [
     name: "Kaithari Mundu", 
     category: "traditional", 
     subcategory: "women", 
-    price: 299, 
+    price: 199, 
     image: "/Products/Kaithari_Mundu_New.png", 
     images: ["/Products/Kaithari_Mundu_New.png"],
     sizes: ["Free Size"], 
@@ -218,7 +218,7 @@ const INITIAL_PRODUCTS: Product[] = [
 ];
 
 export function ProductProvider({ children }: { children: ReactNode }) {
-  const [products, setProducts] = useLocalStorage<Product[]>('advakkad_products_v6', INITIAL_PRODUCTS);
+  const [products, setProducts] = useLocalStorage<Product[]>('advakkad_products_v7', INITIAL_PRODUCTS);
 
   const addProduct = (newProduct: Omit<Product, 'id'>) => {
     const id = Date.now(); // Simple ID generation
