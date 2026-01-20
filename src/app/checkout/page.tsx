@@ -450,7 +450,7 @@ export default function CheckoutPage() {
 
         .place-order-btn:disabled {
            background: #ccc;
-           cursor: not-allowed;
+           cursor: not-allowed; } .payment-option { display: block !important; } .option-header { display: flex; align-items: center; gap: 0.75rem; } .payment-details { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; animation: fadeIn 0.3s ease; } .payment-input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; margin-bottom: 0.75rem; } .payment-note { font-size: 0.85rem; color: #666; margin-top: -0.25rem; } .btn-verify { background: #333; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; } @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } } .dummy {
         }
       `}</style>
     </div>
