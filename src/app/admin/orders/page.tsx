@@ -1,22 +1,63 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function AdminOrders() {
   const [filterStatus, setFilterStatus] = useState('All');
-
-  // Mock Data
-  const orders = [
+  const [orders, setOrders] = useState([
     { id: '#ORD-7821', customer: 'Rahul Krishna', email: 'rahul@example.com', date: 'Jan 12, 2026', amount: 2499, status: 'Pending', items: 2 },
     { id: '#ORD-7820', customer: 'Sarah Jones', email: 'sarah@example.com', date: 'Jan 11, 2026', amount: 1299, status: 'Shipped', items: 1 },
     { id: '#ORD-7819', customer: 'Mohammed Ali', email: 'pli@example.com', date: 'Jan 10, 2026', amount: 5999, status: 'Delivered', items: 4 },
     { id: '#ORD-7818', customer: 'Priya S.', email: 'priya@example.com', date: 'Jan 09, 2026', amount: 899, status: 'Cancelled', items: 1 },
     { id: '#ORD-7817', customer: 'Amit Verma', email: 'amit@example.com', date: 'Jan 08, 2026', amount: 3200, status: 'Delivered', items: 3 },
-  ];
+  ]);
+
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingOrder, setEditingOrder] = useState<typeof orders[0] | null>(null);
+  const [newStatus, setNewStatus] = useState('');
+
+  // Load from Local Storage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('advakkad_orders');
+      if (saved) {
+        try {
+          setOrders(JSON.parse(saved));
+        } catch (e) {
+          console.error("Failed to parse orders", e);
+        }
+      }
+    }
+  }, []);
+
+  // Save to Local Storage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('advakkad_orders', JSON.stringify(orders));
+    }
+  }, [orders]);
 
   const filteredOrders = filterStatus === 'All' 
     ? orders 
     : orders.filter(order => order.status === filterStatus);
+
+  const handleManage = (order: typeof orders[0]) => {
+    setEditingOrder(order);
+    setNewStatus(order.status);
+    setIsModalOpen(true);
+  };
+
+  const handleSave = () => {
+    if (editingOrder) {
+      const updatedOrders = orders.map(order => 
+        order.id === editingOrder.id ? { ...order, status: newStatus } : order
+      );
+      setOrders(updatedOrders);
+      setIsModalOpen(false);
+      setEditingOrder(null);
+    }
+  };
 
   return (
     <div className="orders-page">
@@ -73,13 +114,48 @@ export default function AdminOrders() {
                   </span>
                 </td>
                 <td>
-                  <button className="action-link">Manage</button>
+                  <button className="action-link" onClick={() => handleManage(order)}>Manage</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Manage Order Modal */}
+      {isModalOpen && editingOrder && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Manage Order {editingOrder.id}</h2>
+            
+            <div className="modal-details">
+              <p><strong>Customer:</strong> {editingOrder.customer}</p>
+              <p><strong>Amount:</strong> ₹ {editingOrder.amount}</p>
+              <p><strong>Date:</strong> {editingOrder.date}</p>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="status-select">Update Status</label>
+              <select 
+                id="status-select"
+                value={newStatus} 
+                onChange={(e) => setNewStatus(e.target.value)}
+                className="status-select"
+              >
+                <option value="Pending">Pending</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <div className="modal-actions">
+              <button className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
+              <button className="btn-save" onClick={handleSave}>Save Changes</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         .page-header {
@@ -199,6 +275,93 @@ export default function AdminOrders() {
         
         .action-link:hover {
           text-decoration: underline;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0,0,0,0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+
+        .modal-content {
+          background: white;
+          padding: 2rem;
+          border-radius: 12px;
+          width: 90%;
+          max-width: 500px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .modal-content h2 {
+          margin-top: 0;
+          margin-bottom: 1.5rem;
+          font-family: var(--font-playfair);
+          color: #1a1a1a;
+        }
+
+        .modal-details {
+          background: #f9fafb;
+          padding: 1rem;
+          border-radius: 8px;
+          margin-bottom: 1.5rem;
+        }
+
+        .modal-details p {
+          margin: 0.5rem 0;
+          color: #555;
+        }
+
+        .form-group {
+          margin-bottom: 2rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          color: #333;
+        }
+
+        .status-select {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          font-size: 1rem;
+        }
+
+        .modal-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 1rem;
+        }
+
+        .btn-cancel {
+          background: #f5f5f5;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 6px;
+          cursor: pointer;
+          color: #666;
+          font-weight: 600;
+        }
+
+        .btn-save {
+          background: #d32f2f;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 6px;
+          cursor: pointer;
+          color: white;
+          font-weight: 600;
         }
       `}</style>
     </div>
