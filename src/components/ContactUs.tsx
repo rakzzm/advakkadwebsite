@@ -147,6 +147,22 @@ export default function ContactUs() {
         </div>
       </div>
 
+      {/* Google Map Section */}
+      <div className="card" style={{ marginTop: '2rem' }}>
+        <h3 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Find Us on Google Maps</h3>
+        <div style={{ width: '100%', overflow: 'hidden', borderRadius: '8px' }}>
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4707365325944!2d76.34071517485808!3d10.851756089301652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba7da0afc754681%3A0x255be42fd5fb8015!2sAdavakkad%20Collections!5e0!3m2!1sen!2sin!4v1768903733954!5m2!1sen!2sin" 
+            width="100%" 
+            height="450" 
+            style={{ border: 0 }} 
+            allowFullScreen={true} 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+
       {/* Map or Additional Info */}
       <div 
         className="card mt-3 text-center" 
